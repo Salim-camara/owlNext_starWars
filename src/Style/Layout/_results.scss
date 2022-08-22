@@ -1,0 +1,12 @@
+.App_results {
+    width: 60%;
+}
+
+.elementContainer {
+    @include dsf(space-between);
+    font-size: 25px;
+    padding: 5px;
+    margin-top: 25px;
+    border-top: 2px solid $primary-color;
+    border-bottom: 2px solid $primary-color;
+}
