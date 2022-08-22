@@ -1,0 +1,14 @@
+// display flex
+@mixin dsf($e: flex-start, $f: flex-start) {
+    display: flex;
+    justify-content: $e;
+    align-items: $f;
+}
+
+// display column
+@mixin dsc($e: flex-start, $f: flex-start) {
+    display: flex;
+    flex-direction: column;
+    justify-content: $e;
+    align-items: $f;
+}
