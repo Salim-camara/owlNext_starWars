@@ -6,6 +6,8 @@ import starWars from './img/starWars.png';
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [data, setData] = useState(null);
+  const [modalId, setModalId] = useState(null);
+  const [isModalLaunched, setIsModalLaunched] = useState(false);
 
   // fetching data
   useEffect(() => {
@@ -30,22 +32,35 @@ function App() {
   // list generator
   const listGenerator = () => {
     const filtredData = data.filter((element) => element.name.toLowerCase().includes(inputValue.toLowerCase()));
-    for (const element of filtredData) {
-      const elementContainer = document.createElement('div');
-      const elementContainerRight = document.createElement('div');
-      const elementContainerLeft = document.createElement('div');
-      elementContainer.classList.add('elementContainer');
-      elementContainerRight.classList.add('elementContainer_right');
-      elementContainerLeft.classList.add('elementContainer_left');
-      elementContainerRight.innerHTML = 'Afficher détails';
-      if (element.climate) {
-        elementContainerLeft.innerHTML = `Planète  =>  <strong>${element.name}</strong>`;
-      } else {
-        elementContainerLeft.innerHTML = `Personnage  =>  <strong>${element.name}</strong>`;
+    if(filtredData.length == 0) {
+      document.querySelector('.App_results').innerHTML = 'Aucun résultat trouvé';
+    } else {
+      for (const element of filtredData) {
+        const elementContainer = document.createElement('div');
+        const elementContainerRight = document.createElement('div');
+        const elementContainerLeft = document.createElement('div');
+        elementContainer.classList.add('elementContainer');
+        elementContainerRight.classList.add('elementContainer_right');
+        elementContainerLeft.classList.add('elementContainer_left');
+        elementContainerRight.innerHTML = 'Afficher détails';
+        elementContainerRight.addEventListener('click', () => {
+          const modal = document.querySelector('.modal');
+          modal.innerHTML = '';
+          setIsModalLaunched(true);
+          setModalId(element.url);
+          modal.classList.remove('modalHide');
+        });
+        if (element.climate) {
+          elementContainerLeft.innerHTML = `Planète  =>  <strong>${element.name}</strong>`;
+        } else {
+          elementContainerLeft.innerHTML = `Personnage  =>  <strong>${element.name}</strong>`;
+        }
+        elementContainer.appendChild(elementContainerLeft);
+        elementContainer.appendChild(elementContainerRight);
+        document.querySelector('.App_results').appendChild(elementContainer);
+        console.log(data);
+        
       }
-      elementContainer.appendChild(elementContainerLeft);
-      elementContainer.appendChild(elementContainerRight);
-      document.querySelector('.App_results').appendChild(elementContainer);
     }
   }
 
@@ -54,6 +69,48 @@ function App() {
     document.querySelector('.App_results').innerHTML = '';
     listGenerator();
   }
+
+  // modal
+  useEffect(() => {
+    if(isModalLaunched) {
+      const findTarget = data.find((element) => element.url == modalId);
+      const modal = document.querySelector('.modal');
+      const modalTitle = document.createElement('div');
+      const modalDetailContainer = document.createElement('div');
+      const modalDetail1 = document.createElement('p');
+      const modalDetail2 = document.createElement('p');
+      const modalDetail3 = document.createElement('p');
+      const modalDetail4 = document.createElement('p');
+      const modalCross = document.createElement('div');
+      modalTitle.classList.add('modal_title');
+      modalDetailContainer.classList.add('modal_detail');
+      modalCross.classList.add('modal_cross');
+      modal.appendChild(modalTitle);
+      modal.appendChild(modalDetailContainer);
+      modal.appendChild(modalCross);
+      modalDetailContainer.appendChild(modalDetail1);
+      modalDetailContainer.appendChild(modalDetail2);
+      modalDetailContainer.appendChild(modalDetail3);
+      modalDetailContainer.appendChild(modalDetail4);
+      modalCross.innerHTML = 'X';
+      modalCross.addEventListener('click', () => {
+        modal.classList.add('modalHide');
+      })
+      modalTitle.innerHTML = findTarget.name;
+
+      if(modalId.includes('people')) {
+        modalDetail1.innerHTML = `Année de naissance / création: ${findTarget.birth_year}`;
+        modalDetail2.innerHTML = `Poids: ${findTarget.mass}`;
+        modalDetail3.innerHTML = `Taille: ${findTarget.height}`;
+        modalDetail4.innerHTML = `Couleur de peau / peinture: ${findTarget.skin_color}`;
+      } else {
+        modalDetail1.innerHTML = `Climat: ${findTarget.climate}`;
+        modalDetail2.innerHTML = `Population: ${findTarget.population}`;
+        modalDetail3.innerHTML = `Période de rotation: ${findTarget.rotation_period}`;
+        modalDetail4.innerHTML = `Gravité: ${findTarget.gravity}`;
+      }
+    }
+  }, [modalId]);
 
 
   return (
@@ -73,10 +130,8 @@ function App() {
         </div>
       </div>
       <div className="App_results">
-
       </div>
-      <div>
-
+      <div className='modal modalHide'>
       </div>
     </div>
   );

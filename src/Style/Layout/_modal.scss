@@ -1,0 +1,40 @@
+.modal {
+    position: fixed;
+    top: 25%;
+    @include dsc(flex-start, center);
+    height: 40%;
+    width: 20%;
+    padding: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: $primary-color;
+
+    &_title {
+        height: 40%;
+        @include dsf(center, center);
+        font-size: 35px;
+    }
+    &_detail {
+        width: 100%;
+        border-top: 1px solid $white;
+    }
+    &_cross {
+        position: absolute;
+        @include dsf(center, center);
+        top: -15px;
+        right: -15px;
+        width: 30px;
+        height: 30px;
+        background-color: $red;
+        border: none;
+        border-radius: 50%;
+    }
+    &_cross:hover {
+        cursor: pointer;
+    }
+}
+
+// modal hide
+.modalHide {
+    display: none;
+}

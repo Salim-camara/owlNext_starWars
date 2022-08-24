@@ -3,10 +3,18 @@
 }
 
 .elementContainer {
-    @include dsf(space-between);
+    @include dsf(space-between, center);
     font-size: 25px;
     padding: 5px;
     margin-top: 25px;
     border-top: 2px solid $primary-color;
     border-bottom: 2px solid $primary-color;
+
+    &_right {
+        font-size: 15px;
+    }
+
+    &_right:hover {
+        cursor: pointer;
+    }
 }
